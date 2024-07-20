@@ -3,7 +3,7 @@ import Group from "./GroupItem";
 import { Button } from "./ui/button";
 import { getRandomGroup } from "@/utils/groups";
 
-const Groups = ({ groups, movePlayer, onAddPoints }) => {
+const Groups = ({ groups, movePlayer, onAddPoints, deletePlayer }) => {
   const [currentGroup, setCurrentGroup] = useState(null);
 
   const groupRefs = useRef([]);
@@ -40,6 +40,7 @@ const Groups = ({ groups, movePlayer, onAddPoints }) => {
               score={group.score}
               currentGroup={currentGroup}
               resetGroup={() => setCurrentGroup(null)}
+              deletePlayer={deletePlayer}
             />
           </div>
         ))}
