@@ -25,6 +25,8 @@ const App = () => {
     JSON.parse(localStorage.getItem("scores")) || {}
   );
 
+  const [needUpdate, setNeedUpdate] = useState(false);
+
   const handleAddPerson = (person) => {
     setPeople([...people, person]);
   };
@@ -120,6 +122,7 @@ const App = () => {
 
   const refreshList = () => {
     // Get people from people state that are not stored in groups state
+    setNeedUpdate(false);
     const newPeople = people.filter(
       (person) =>
         !Object.values(groupedPlayers).some((group) =>
@@ -166,6 +169,18 @@ const App = () => {
 
   const sortedGroups = groups.sort((a, b) => b.score - a.score);
 
+  useEffect(() => {
+    const newPeople = people.filter(
+      (person) =>
+        !Object.values(groupedPlayers).some((group) =>
+          group.some((player) => player.name === person)
+        )
+    );
+    if (newPeople.length > 0) {
+      setNeedUpdate(true);
+    }
+  }, [people]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex flex-col h-screen">
@@ -177,6 +192,7 @@ const App = () => {
                 players={people}
                 onRemovePlayer={handleRemovePerson}
                 refresh={refreshList}
+                needUpdate={needUpdate}
               />
             </div>
           </div>
