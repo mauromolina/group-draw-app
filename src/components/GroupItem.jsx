@@ -16,15 +16,8 @@ const Group = ({
   resetGroup,
   deletePlayer,
   updatePlayer,
+  groups,
 }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: "player",
-    drop: (item) => movePlayer(item.id, index),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  }));
-
   const [addScore, setAddScore] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState(null);
@@ -58,7 +51,6 @@ const Group = ({
 
   return (
     <div
-      ref={drop}
       className={`bg-white p-4 rounded-lg shadow-md ${
         isShaking ? "shake border-4 border-red-500" : ""
       }`}
@@ -77,6 +69,8 @@ const Group = ({
           resetPlayer={() => setCurrentPlayer(null)}
           deletePlayer={deletePlayer}
           updatePlayer={updatePlayer}
+          playerGroup={group.name}
+          groups={groups}
         />
       ))}
       <div className="mt-2 flex items-center gap-2">
