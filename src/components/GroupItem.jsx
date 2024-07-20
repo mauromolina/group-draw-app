@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { getRandomPlayer } from "@/utils/groups";
+import { UserRound } from "lucide-react";
 
 const Group = ({
   group,
@@ -33,11 +34,9 @@ const Group = ({
 
   const handleRandomPlayer = () => {
     setCurrentPlayer(null);
-    if (currentGroup && !currentPlayer) {
-      const randomPlayer = getRandomPlayer(currentGroup);
-      console.log({ randomPlayer });
-      setCurrentPlayer(randomPlayer);
-    }
+    const randomPlayer = getRandomPlayer(group);
+    console.log({ randomPlayer });
+    setCurrentPlayer(randomPlayer);
   };
 
   useEffect(() => {
@@ -90,15 +89,14 @@ const Group = ({
           Agregar puntos
         </Button>
       </div>
-      {currentGroup && currentGroup.name === group.name && (
-        <Button
-          onClick={handleRandomPlayer}
-          type="button"
-          className="w-full mt-2 bg-black"
-        >
-          Elegir 1 participante
-        </Button>
-      )}
+      <Button
+        onClick={handleRandomPlayer}
+        type="button"
+        className="w-full mt-2 bg-black"
+      >
+        <UserRound size={20} color="white" strokeWidth={1.5} className="mr-2" />{" "}
+        Elegir 1 participante
+      </Button>
     </div>
   );
 };
