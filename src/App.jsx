@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import GroupForm from "./components/GroupForm";
-import PersonList from "./components/PersonList";
-import GroupDisplay from "./components/GroupDisplay";
-import GroupTurn from "./components/GroupTurn";
 import { divideIntoGroups } from "./utils/groups";
-import { Input } from "./components/ui/input";
-import { Button } from "./components/ui/button";
 import "./index.css";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./components/ui/select";
 import PlayersForm from "./components/PlayersForm";
 import PlayersList from "./components/PlayersList";
 import GroupsForm from "./components/GroupsForm";
 import Groups from "./components/Groups";
+import Footer from "./components/Footer";
 
 const App = () => {
   // get people from local storage or set it to an empty array
@@ -46,13 +34,13 @@ const App = () => {
 
   const handleSortGroups = (group) => {
     if (people.length > 0) {
-      const numGroups = Math.ceil(people.length / group); // Example logic for number of groups
-      const newGroups = divideIntoGroups(people, numGroups);
+      const newGroups = divideIntoGroups(people, group);
       setGroups(
         newGroups.map((group, index) => ({
           name: `Grupo ${index + 1}`,
           color: `hsl(${index * 60}, 70%, 70%)`,
           people: { ...group },
+          score: 0,
         }))
       );
       const playersByGroup = newGroups.reduce((acc, group, idx) => {
@@ -115,11 +103,18 @@ const App = () => {
   };
 
   const handleAddPoints = (group, points) => {
-    console.log({ group, points, type: typeof points });
-    setScores((prev) => ({
-      ...prev,
-      [group]: parseInt(prev[group] + points),
-    }));
+    setGroups((prev) => {
+      const updatedGroups = prev.map((g) => {
+        if (g.name === group) {
+          return {
+            ...g,
+            score: g.score + points,
+          };
+        }
+        return g;
+      });
+      return updatedGroups;
+    });
   };
 
   useEffect(() => {
@@ -131,35 +126,15 @@ const App = () => {
     }
   }, [groups, people, groupedPlayers, scores]);
 
+  const sortedGroups = groups.sort((a, b) => b.score - a.score);
+
   return (
     <DndProvider backend={HTML5Backend}>
-      {/* <div>
-        <h1 className="text-center text-2xl font-bold my-4">Group Draw App</h1>
-        <GroupForm
-          onAddPerson={handleAddPerson}
-          onSortGroups={handleSortGroups}
-          people={people}
-        />
-        <PersonList people={people} onRemovePerson={handleRemovePerson} />
-        <GroupDisplay
-          groups={groups}
-          players={groupedPlayers}
-          movePlayer={movePlayer}
-          scores={scores}
-          onAddPoints={handleAddPoints}
-        />
-        <GroupTurn groups={groups} />
-      </div> */}
-
-      {/* <div className="mt-4">
-        <Button>Test</Button>
-      </div> */}
-
       <div className="flex flex-col h-screen">
         <main className="flex-1 p-8 grid-cols-2 flex flex-col gap-8">
           <div className="bg-card p-6 rounded-lg shadow-lg">
             <div className="flex flex-col gap-2">
-              <PlayersForm addPlayer={handleAddPerson} />
+              <PlayersForm addPlayer={handleAddPerson} players={people} />
               <PlayersList
                 players={people}
                 onRemovePlayer={handleRemovePerson}
@@ -171,13 +146,13 @@ const App = () => {
           </div>
           <div className="bg-card p-6 rounded-lg shadow-lg drop-shadow-sm">
             <Groups
-              groups={groups}
+              groups={sortedGroups}
               movePlayer={movePlayer}
               onAddPoints={handleAddPoints}
-              scores={scores}
             />
           </div>
         </main>
+        <Footer />
       </div>
     </DndProvider>
   );

@@ -12,6 +12,7 @@ const Group = ({
   onAddPoints,
   score,
   currentGroup,
+  resetGroup,
 }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "player",
@@ -40,13 +41,19 @@ const Group = ({
   };
 
   useEffect(() => {
-    console.log({ currentGroup });
+    if (currentGroup === null) return;
     if (currentGroup && currentGroup.name === group.name) {
       setIsShaking(true);
-      const timer = setTimeout(() => setIsShaking(false), 4000); // Shake duration
-      return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+        resetGroup();
+      }, 4000);
+      return () => {
+        setIsShaking(false);
+        clearTimeout(timer);
+      };
     }
-  }, [currentGroup, group.name]);
+  }, [currentGroup]);
 
   return (
     <div
@@ -56,8 +63,8 @@ const Group = ({
       }`}
       style={{ minHeight: "150px", backgroundColor: group.color }}
     >
-      <div className="flex items-center justify-between gap-2">
-        <h3 className="text-lg font-bold mb-2">Grupo {index + 1}</h3>
+      <div className="flex justify-between gap-2">
+        <h3 className="text-lg font-bold mb-2">{group.name}</h3>
         <h4 className="text-lg font-bold mb-2">{score} puntos</h4>
       </div>
       {Object.values(group.people).map((player) => (
@@ -66,6 +73,7 @@ const Group = ({
           id={player.id}
           name={player.name}
           currentPlayer={currentPlayer}
+          resetPlayer={() => setCurrentPlayer(null)}
         />
       ))}
       <div className="mt-2 flex items-center gap-2">
@@ -73,6 +81,7 @@ const Group = ({
           type="number"
           placeholder="Puntos"
           onChange={(e) => setAddScore(e.target.value)}
+          value={addScore}
         />
         <Button
           className="bg-blue-500 text-white py-1 px-2 rounded-md hover:bg-blue-600"
