@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { getRandomPlayer } from "@/utils/groups";
+import { UserRound } from "lucide-react";
 
 const Group = ({
   group,
@@ -93,6 +94,7 @@ const Group = ({
         type="button"
         className="w-full mt-2 bg-black"
       >
+        <UserRound size={20} color="white" strokeWidth={1.5} className="mr-2" />{" "}
         Elegir 1 participante
       </Button>
     </div>
