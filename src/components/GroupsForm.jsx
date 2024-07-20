@@ -19,12 +19,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { Input } from "./ui/input";
 
 const GroupsForm = ({ sort, reset }) => {
   const [numGroups, setNumGroups] = useState(2);
 
-  const handleGroupsChange = (value) => {
-    setNumGroups(parseInt(value));
+  const handleGroupsChange = (e) => {
+    setNumGroups(parseInt(e.target.value));
   };
 
   const handleSubmit = (e) => {
@@ -40,26 +41,19 @@ const GroupsForm = ({ sort, reset }) => {
           onSubmit={handleSubmit}
           className="flex items-center justify-between flex-col gap-4"
         >
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-center w-full gap-8">
             <label htmlFor="groups" className="text-sm font-medium">
               Cantidad de grupos
             </label>
-            <Select
+            <Input
+              type="number"
               id="groups"
               value={numGroups}
-              onValueChange={handleGroupsChange}
-            >
-              <SelectTrigger className="w-24">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {[2, 3, 4, 5, 6, 7, 8].map((numGroups) => (
-                  <SelectItem key={numGroups} value={numGroups}>
-                    {numGroups}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={handleGroupsChange}
+              className="w-24 text-center"
+              min="2"
+              max="10"
+            />
           </div>
           <Button className="w-full">
             <Dices size={20} color="white" strokeWidth={1.5} className="mr-2" />{" "}

@@ -14,6 +14,7 @@ const Group = ({
   score,
   currentGroup,
   resetGroup,
+  deletePlayer,
 }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "player",
@@ -73,6 +74,7 @@ const Group = ({
           name={player.name}
           currentPlayer={currentPlayer}
           resetPlayer={() => setCurrentPlayer(null)}
+          deletePlayer={deletePlayer}
         />
       ))}
       <div className="mt-2 flex items-center gap-2">

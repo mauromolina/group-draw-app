@@ -159,6 +159,22 @@ const App = () => {
     setNeedUpdate(false);
   };
 
+  const deletePlayer = (playerId) => {
+    const updatedGroups = { ...groupedPlayers };
+    Object.keys(updatedGroups).forEach((group) => {
+      updatedGroups[group] = updatedGroups[group].filter(
+        (player) => player.id !== playerId
+      );
+    });
+    setGroupedPlayers(updatedGroups);
+    setGroups((prevGroups) =>
+      prevGroups.map((group) => ({
+        ...group,
+        people: updatedGroups[group.name],
+      }))
+    );
+  };
+
   useEffect(() => {
     if (groups.length > 0) {
       localStorage.setItem("players", JSON.stringify(people));
@@ -180,7 +196,7 @@ const App = () => {
     if (newPeople.length > 0 && groups.length > 0) {
       setNeedUpdate(true);
     }
-  }, [people]);
+  }, [people, groups]);
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -206,6 +222,7 @@ const App = () => {
                 groups={sortedGroups}
                 movePlayer={movePlayer}
                 onAddPoints={handleAddPoints}
+                deletePlayer={deletePlayer}
               />
             </div>
           )}
