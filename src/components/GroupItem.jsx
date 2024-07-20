@@ -33,11 +33,9 @@ const Group = ({
 
   const handleRandomPlayer = () => {
     setCurrentPlayer(null);
-    if (currentGroup && !currentPlayer) {
-      const randomPlayer = getRandomPlayer(currentGroup);
-      console.log({ randomPlayer });
-      setCurrentPlayer(randomPlayer);
-    }
+    const randomPlayer = getRandomPlayer(group);
+    console.log({ randomPlayer });
+    setCurrentPlayer(randomPlayer);
   };
 
   useEffect(() => {
@@ -90,15 +88,13 @@ const Group = ({
           Agregar puntos
         </Button>
       </div>
-      {currentGroup && currentGroup.name === group.name && (
-        <Button
-          onClick={handleRandomPlayer}
-          type="button"
-          className="w-full mt-2 bg-black"
-        >
-          Elegir 1 participante
-        </Button>
-      )}
+      <Button
+        onClick={handleRandomPlayer}
+        type="button"
+        className="w-full mt-2 bg-black"
+      >
+        Elegir 1 participante
+      </Button>
     </div>
   );
 };

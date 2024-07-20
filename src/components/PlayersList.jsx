@@ -1,7 +1,10 @@
 import { RefreshCcw } from "lucide-react";
 import { Button } from "./ui/button";
 
-const PlayersList = ({ players }) => {
+const PlayersList = ({ players, onRemovePlayer, refresh }) => {
+  const handleRefreshList = () => {
+    refresh();
+  };
   return (
     <div className="bg-muted p-4 rounded-md flex flex-col items-center gap-2">
       {players.length === 0 && (
@@ -13,12 +16,15 @@ const PlayersList = ({ players }) => {
           className="flex items-center justify-between py-2 w-full"
         >
           <span>{player}</span>
-          <button className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600">
+          <Button
+            onClick={() => onRemovePlayer(idx)}
+            className="bg-red-500 text-white py-1 px-2 rounded-md hover:bg-red-600"
+          >
             Eliminar
-          </button>
+          </Button>
         </div>
       ))}
-      <Button className="bg-green-500 mt-2">
+      <Button className="bg-green-500 mt-2" onClick={handleRefreshList}>
         <RefreshCcw className="mr-2" /> Actualizar listado
       </Button>
     </div>

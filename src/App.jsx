@@ -8,6 +8,7 @@ import PlayersList from "./components/PlayersList";
 import GroupsForm from "./components/GroupsForm";
 import Groups from "./components/Groups";
 import Footer from "./components/Footer";
+import { v4 as uuidv4 } from "uuid";
 
 const App = () => {
   // get people from local storage or set it to an empty array
@@ -117,7 +118,35 @@ const App = () => {
     });
   };
 
-  // create a function that clear all data from local storage
+  const refreshList = () => {
+    // Get people from people state that are not stored in groups state
+    const newPeople = people.filter(
+      (person) =>
+        !Object.values(groupedPlayers).some((group) =>
+          group.some((player) => player.name === person)
+        )
+    );
+
+    // Distribute new people among existing groups
+    const updatedGroups = { ...groupedPlayers };
+    newPeople.forEach((person, index) => {
+      const groupIndex = index % Object.keys(updatedGroups).length;
+      const groupName = Object.keys(updatedGroups)[groupIndex];
+      updatedGroups[groupName].push({ id: uuidv4(), name: person });
+    });
+
+    // Update the state with the new groups
+    setGroupedPlayers(updatedGroups);
+
+    // Optionally, update the groups state if needed
+    setGroups((prevGroups) =>
+      prevGroups.map((group) => ({
+        ...group,
+        people: updatedGroups[group.name],
+      }))
+    );
+  };
+
   const resetData = () => {
     localStorage.clear();
     setPeople([]);
@@ -147,19 +176,22 @@ const App = () => {
               <PlayersList
                 players={people}
                 onRemovePlayer={handleRemovePerson}
+                refresh={refreshList}
               />
             </div>
           </div>
           <div className="bg-card p-6 rounded-lg shadow-lg drop-shadow-sm">
             <GroupsForm sort={handleSortGroups} reset={resetData} />
           </div>
-          <div className="bg-card p-6 rounded-lg shadow-lg drop-shadow-sm">
-            <Groups
-              groups={sortedGroups}
-              movePlayer={movePlayer}
-              onAddPoints={handleAddPoints}
-            />
-          </div>
+          {groups && groups.length > 0 && (
+            <div className="bg-card p-6 rounded-lg shadow-lg drop-shadow-sm">
+              <Groups
+                groups={sortedGroups}
+                movePlayer={movePlayer}
+                onAddPoints={handleAddPoints}
+              />
+            </div>
+          )}
         </main>
         <Footer />
       </div>
