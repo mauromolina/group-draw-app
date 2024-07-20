@@ -175,6 +175,31 @@ const App = () => {
     );
   };
 
+  const updatePlayer = (playerId, newName) => {
+    const updatedGroups = { ...groupedPlayers };
+    Object.keys(updatedGroups).forEach((group) => {
+      const prevName = updatedGroups[group].find(
+        (player) => player.id === playerId
+      )?.name;
+      if (prevName) {
+        console.log({ prevName, newName });
+        updatedGroups[group] = updatedGroups[group].map((player) =>
+          player.id === playerId ? { ...player, name: newName } : player
+        );
+        setPeople(
+          people.map((person) => (person === prevName ? newName : person))
+        );
+      }
+    });
+    setGroupedPlayers(updatedGroups);
+    setGroups((prevGroups) =>
+      prevGroups.map((group) => ({
+        ...group,
+        people: updatedGroups[group.name],
+      }))
+    );
+  };
+
   useEffect(() => {
     if (groups.length > 0) {
       localStorage.setItem("players", JSON.stringify(people));
@@ -223,6 +248,7 @@ const App = () => {
                 movePlayer={movePlayer}
                 onAddPoints={handleAddPoints}
                 deletePlayer={deletePlayer}
+                updatePlayer={updatePlayer}
               />
             </div>
           )}

@@ -1,4 +1,4 @@
-import { ArrowLeft, CircleX, Trash2 } from "lucide-react";
+import { ArrowLeft, CircleX, Pencil, Save, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 import { Button } from "./ui/button";
@@ -13,8 +13,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { Input } from "./ui/input";
 
-const Player = ({ name, id, currentPlayer, resetPlayer, deletePlayer }) => {
+const Player = ({
+  name,
+  id,
+  currentPlayer,
+  resetPlayer,
+  deletePlayer,
+  updatePlayer,
+}) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "player",
     item: { id },
@@ -24,6 +32,7 @@ const Player = ({ name, id, currentPlayer, resetPlayer, deletePlayer }) => {
   }));
 
   const [isShaking, setIsShaking] = useState(false);
+  const [playerName, setPlayerName] = useState(name);
 
   useEffect(() => {
     if (currentPlayer === null) return;
@@ -50,6 +59,42 @@ const Player = ({ name, id, currentPlayer, resetPlayer, deletePlayer }) => {
         style={{ backgroundColor: "lightblue", cursor: "grab", color: "black" }}
       >
         <span className="flex-grow text-center">{name}</span>
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <Pencil
+              className="ml-auto mr-4"
+              size={20}
+              color="green"
+              strokeWidth={1.5}
+            />
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Editar participante</AlertDialogTitle>
+              <AlertDialogDescription>
+                <Input
+                  type="text"
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                />
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction
+                className="bg-green-600"
+                onClick={() => updatePlayer(id, playerName)}
+              >
+                <Save
+                  size={20}
+                  color="white"
+                  strokeWidth={1.5}
+                  className="mr-2"
+                />{" "}
+                Guardar
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
         <AlertDialog>
           <AlertDialogTrigger>
             <CircleX
