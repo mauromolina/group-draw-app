@@ -22,7 +22,7 @@ const GroupsForm = ({ sort }) => {
 
   return (
     <>
-      <h2 className="text-xl font-bold mb-4">Grupos</h2>
+      <h2 className="text-xl font-bold mb-4 text-center">Grupos</h2>
       <div className="flex flex-col gap-4">
         <form
           onSubmit={handleSubmit}
@@ -30,7 +30,7 @@ const GroupsForm = ({ sort }) => {
         >
           <div className="flex items-center justify-between w-full">
             <label htmlFor="groups" className="text-sm font-medium">
-              Cantidad de integrantes ({numGroups})
+              Cantidad de grupos
             </label>
             <Select
               id="groups"

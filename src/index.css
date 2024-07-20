@@ -20,8 +20,31 @@
   }
 }
 
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
 .shake,
 .shakePlayer {
   animation: shake 0.4s;
   animation-iteration-count: 6;
+}
+
+.group-enter {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.group-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 500ms, transform 500ms;
+}
+.group-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.group-exit-active {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 500ms, transform 500ms;
 }

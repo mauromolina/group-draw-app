@@ -1,11 +1,25 @@
 import { v4 as uuidv4 } from "uuid";
 
-// Función para dividir personas en grupos
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
 export const divideIntoGroups = (people, numGroups) => {
+  // Shuffle the array of people
+  const shuffledPeople = shuffleArray([...people]);
+
+  // Create an array of empty groups
   const groups = Array.from({ length: numGroups }, () => []);
-  people.forEach((person, index) => {
+
+  // Distribute people into groups
+  shuffledPeople.forEach((person, index) => {
     groups[index % numGroups].push({ id: uuidv4(), name: person });
   });
+
   return groups;
 };
 

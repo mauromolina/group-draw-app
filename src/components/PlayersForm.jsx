@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-const PlayersForm = ({ addPlayer }) => {
+const PlayersForm = ({ addPlayer, players }) => {
   const [player, setPlayer] = useState("");
 
   const handleFormSubmit = (e) => {
@@ -14,7 +14,9 @@ const PlayersForm = ({ addPlayer }) => {
 
   return (
     <>
-      <h2 className="text-xl font-bold mb-4">Participantes</h2>
+      <h2 className="text-xl font-bold mb-4 text-center">
+        Participantes ({players.length})
+      </h2>
       <form className="flex justify-between gap-2" onSubmit={handleFormSubmit}>
         <Input
           type="text"
