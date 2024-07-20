@@ -7,8 +7,20 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Button } from "./ui/button";
+import { ArrowLeft, CircleAlert, Dices, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
-const GroupsForm = ({ sort }) => {
+const GroupsForm = ({ sort, reset }) => {
   const [numGroups, setNumGroups] = useState(2);
 
   const handleGroupsChange = (value) => {
@@ -49,7 +61,52 @@ const GroupsForm = ({ sort }) => {
               </SelectContent>
             </Select>
           </div>
-          <Button className="w-full">Generar equipos</Button>
+          <Button className="w-full">
+            <Dices size={20} color="white" strokeWidth={1.5} className="mr-2" />{" "}
+            Generar equipos
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button type="button" className="bg-red-600">
+                <CircleAlert
+                  size={20}
+                  color="white"
+                  strokeWidth={1.5}
+                  className="mr-2"
+                />{" "}
+                Limpiar todos los datos
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Estas seguro?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  El texto es claro, pero me veo obligado a avisarte que si
+                  aceptas, vas a borrar todos los datos cargados 😰
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-green-500 text-white">
+                  <ArrowLeft
+                    size={20}
+                    color="white"
+                    strokeWidth={1.5}
+                    className="mr-2"
+                  />
+                  No, que miedo
+                </AlertDialogCancel>
+                <AlertDialogAction className="bg-red-600" onClick={reset}>
+                  <Trash2
+                    size={20}
+                    color="white"
+                    strokeWidth={1.5}
+                    className="mr-2"
+                  />{" "}
+                  Si, eliminar todo
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </form>
       </div>
     </>

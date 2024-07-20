@@ -117,6 +117,15 @@ const App = () => {
     });
   };
 
+  // create a function that clear all data from local storage
+  const resetData = () => {
+    localStorage.clear();
+    setPeople([]);
+    setGroups([]);
+    setGroupedPlayers({});
+    setScores({});
+  };
+
   useEffect(() => {
     if (groups.length > 0) {
       localStorage.setItem("players", JSON.stringify(people));
@@ -142,7 +151,7 @@ const App = () => {
             </div>
           </div>
           <div className="bg-card p-6 rounded-lg shadow-lg drop-shadow-sm">
-            <GroupsForm sort={handleSortGroups} />
+            <GroupsForm sort={handleSortGroups} reset={resetData} />
           </div>
           <div className="bg-card p-6 rounded-lg shadow-lg drop-shadow-sm">
             <Groups
