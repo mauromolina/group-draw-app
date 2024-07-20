@@ -22,15 +22,10 @@ const Player = ({
   resetPlayer,
   deletePlayer,
   updatePlayer,
+  playerGroup,
+  groups,
 }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: "player",
-    item: { id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
+  const [currentPlayerGroup, setCurrentPlayerGroup] = useState(playerGroup);
   const [isShaking, setIsShaking] = useState(false);
   const [playerName, setPlayerName] = useState(name);
 
@@ -44,6 +39,7 @@ const Player = ({
       }, 4000);
       return () => {
         setIsShaking(false);
+        setPlayerName(name);
         clearTimeout(timer);
       };
     }
@@ -52,11 +48,10 @@ const Player = ({
   return (
     <>
       <div
-        ref={drag}
         className={`p-2 m-1 border rounded-md text-center font-semibold flex items-center justify-between ${
-          isDragging ? "opacity-50" : "opacity-100"
-        } ${isShaking ? "shakePlayer border-4 border-black" : ""}`}
-        style={{ backgroundColor: "lightblue", cursor: "grab", color: "black" }}
+          isShaking ? "shakePlayer border-4 border-black" : ""
+        }`}
+        style={{ backgroundColor: "lightblue", color: "black" }}
       >
         <span className="flex-grow text-center">{name}</span>
         <AlertDialog>
@@ -70,19 +65,54 @@ const Player = ({
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Editar participante</AlertDialogTitle>
+              <AlertDialogTitle className="text-center mb-2">
+                Editar participante
+              </AlertDialogTitle>
               <AlertDialogDescription>
                 <Input
                   type="text"
                   value={playerName}
                   onChange={(e) => setPlayerName(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4"
                 />
+                <label className="font-semibold text-black">Grupo</label>
+                <div className="flex items-center justify-between gap-4 mt-2">
+                  {groups.map((group) => (
+                    <Button
+                      key={group.name}
+                      type="button"
+                      onClick={() => setCurrentPlayerGroup(group.name)}
+                      className={`w-full ${
+                        group.name === currentPlayerGroup
+                          ? "bg-green-500 hover:bg-green-600 text-white"
+                          : "bg-transparent text-black hover:bg-gray-200 border-solid border border-gray-300"
+                      }  py-2 rounded-md`}
+                    >
+                      {group.name}
+                    </Button>
+                  ))}
+                </div>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
+              <AlertDialogCancel
+                className="bg-red-500 hover:bg-red-700 hover:text-white text-white"
+                onClick={() => {
+                  setPlayerName(name);
+                  setCurrentPlayerGroup(playerGroup);
+                }}
+              >
+                <ArrowLeft
+                  size={20}
+                  color="white"
+                  strokeWidth={1.5}
+                  className="mr-2"
+                />
+                Cancelar
+              </AlertDialogCancel>
               <AlertDialogAction
-                className="bg-green-600"
-                onClick={() => updatePlayer(id, playerName)}
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => updatePlayer(id, playerName, currentPlayerGroup)}
               >
                 <Save
                   size={20}

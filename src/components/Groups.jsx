@@ -48,6 +48,7 @@ const Groups = ({
               resetGroup={() => setCurrentGroup(null)}
               deletePlayer={deletePlayer}
               updatePlayer={updatePlayer}
+              groups={groups}
             />
           </div>
         ))}

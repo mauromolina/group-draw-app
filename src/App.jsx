@@ -175,17 +175,28 @@ const App = () => {
     );
   };
 
-  const updatePlayer = (playerId, newName) => {
+  const updatePlayer = (playerId, newName, groupName) => {
     const updatedGroups = { ...groupedPlayers };
+    console.log({ groupName });
     Object.keys(updatedGroups).forEach((group) => {
       const prevName = updatedGroups[group].find(
         (player) => player.id === playerId
       )?.name;
       if (prevName) {
-        console.log({ prevName, newName });
-        updatedGroups[group] = updatedGroups[group].map((player) =>
-          player.id === playerId ? { ...player, name: newName } : player
-        );
+        if (groupName && group !== groupName) {
+          updatedGroups[group] = updatedGroups[group].filter(
+            (player) => player.id !== playerId
+          );
+          updatedGroups[groupName] = [
+            ...updatedGroups[groupName],
+            { id: playerId, name: newName },
+          ];
+          console.log({ updatedGroups });
+        } else {
+          updatedGroups[group] = updatedGroups[group].map((player) =>
+            player.id === playerId ? { ...player, name: newName } : player
+          );
+        }
         setPeople(
           people.map((person) => (person === prevName ? newName : person))
         );
