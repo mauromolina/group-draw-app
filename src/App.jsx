@@ -156,6 +156,7 @@ const App = () => {
     setGroups([]);
     setGroupedPlayers({});
     setScores({});
+    setNeedUpdate(false);
   };
 
   useEffect(() => {
@@ -176,7 +177,7 @@ const App = () => {
           group.some((player) => player.name === person)
         )
     );
-    if (newPeople.length > 0) {
+    if (newPeople.length > 0 && groups.length > 0) {
       setNeedUpdate(true);
     }
   }, [people]);
