@@ -1,7 +1,7 @@
 import { RefreshCcw } from "lucide-react";
 import { Button } from "./ui/button";
 
-const PlayersList = ({ players, onRemovePlayer, refresh }) => {
+const PlayersList = ({ players, onRemovePlayer, refresh, needUpdate }) => {
   const handleRefreshList = () => {
     refresh();
   };
@@ -24,9 +24,11 @@ const PlayersList = ({ players, onRemovePlayer, refresh }) => {
           </Button>
         </div>
       ))}
-      <Button className="bg-green-500 mt-2" onClick={handleRefreshList}>
-        <RefreshCcw className="mr-2" /> Actualizar listado
-      </Button>
+      {needUpdate && (
+        <Button className="bg-green-500 mt-2" onClick={handleRefreshList}>
+          <RefreshCcw className="mr-2" /> Actualizar listado
+        </Button>
+      )}
     </div>
   );
 };
